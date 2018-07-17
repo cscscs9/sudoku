@@ -1,0 +1,113 @@
+body {
+  font: 14px "Century Gothic", Futura, sans-serif;
+}
+
+ol, ul {
+  padding-left: 30px;
+}
+
+button:focus {
+  outline: none;
+}
+
+.smallButton:active, .bigButton:active {
+  background: rgb(192, 189, 189);
+}
+
+.board-row:after {
+  clear: both;
+  content: "";
+  display: table;
+}
+
+
+.square {
+  background: #fff;
+  border: 1px solid #999;
+  float: left;
+  font-size: 22px;
+  font-weight: bold;
+  line-height: 32px;
+  height: 32px;
+  margin-right: -1px;
+  margin-top: -1px;
+  padding: 0;
+  text-align: center;
+  width: 32px;
+}
+
+.kbd-navigation .square:focus {
+  background: #ddd;
+}
+
+.smallButton {
+  background: #fff;
+  border: 1px solid #999;
+  float: left;
+  font-size: 22px;
+  font-weight: bold;
+  line-height: 32px;
+  height: 32px;
+  margin-right: -1px;
+  margin-top: -1px;
+  padding: 0;
+  text-align: center;
+  width: 32px;
+}
+
+.bigButton {
+  background: #fff;
+  border: 2px solid #000;
+  float: left;
+  font-size: 22px;
+  font-weight: bold;
+  line-height: 32px;
+  height: 32px;
+  margin-right: -1px;
+  margin-top: -1px;
+  padding: 0;
+  text-align: center;
+  width: 142px;
+}
+
+.kbd-navigation .bigButton:focus {
+  background: #ddd;
+}
+
+.game-board {
+  display: flex;
+  flex-direction: row;
+  border: 2px solid #000;
+  margin: auto;
+}
+
+.fixedSquare{
+  background: #999;
+}
+
+.selectedSquare{
+  background: rgb(181, 255, 120);
+}
+
+.hintSquare {
+  background: rgb(205, 248, 170);
+}
+
+.errorSquare {
+  border: 3px solid red !important;
+}
+
+.game {
+  width: 284px;
+  margin: auto;
+  text-align: center;
+}
+
+.rightBorder {
+  border-right: 2px solid #000;
+}
+
+.bottomBorder {
+  border-bottom: 2px solid #000;
+}
+
