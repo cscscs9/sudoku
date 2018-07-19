@@ -67,7 +67,22 @@ button:focus {
   margin-top: -1px;
   padding: 0;
   text-align: center;
-  width: 142px;
+  width: 71.9px;
+}
+
+.fullButton {
+  background: #fff;
+  border: 2px solid #000;
+  float: left;
+  font-size: 22px;
+  font-weight: bold;
+  line-height: 32px;
+  height: 32px;
+  margin-right: -1px;
+  margin-top: -1px;
+  padding: 0;
+  text-align: center;
+  width: 284px;
 }
 
 .kbd-navigation .bigButton:focus {
@@ -75,26 +90,19 @@ button:focus {
 }
 
 .game-board {
+  background: #fff;
   display: flex;
   flex-direction: row;
   border: 2px solid #000;
   margin: auto;
 }
 
-.fixedSquare{
-  background: #999;
-}
-
-.selectedSquare{
-  background: rgb(181, 255, 120);
-}
-
-.hintSquare {
-  background: rgb(205, 248, 170);
+.selected{
+  background: rgb(182, 182, 182) !important;
 }
 
 .errorSquare {
-  border: 3px solid red !important;
+  border: 2px solid red !important;
 }
 
 .game {
