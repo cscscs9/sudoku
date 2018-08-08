@@ -1,98 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-
+import {Board} from './board'
+import {InputPad} from './input'
+import {initBoard} from './utils.js'
 
 //easy: 29-32
 //medium: 24-27
 //hard: 19-22
-  
-class Board extends React.Component {
-    isHintSquare(r, c) {
-        var isHintSquare = this.props.selectedr===r || this.props.selectedc===c;
-
-        if(this.props.selectedr!=null){
-            if(this.props.squares[r][c][0]===null) return isHintSquare;
-
-            return isHintSquare || this.props.squares[r][c][0]===this.props.squares[this.props.selectedr][this.props.selectedc][0];
-        }
-        return isHintSquare;
-    }
-
-    renderSquare(r, c) {
-        var classes = "square";
-
-        var color = {};
-
-        if(this.props.squares[r][c][1] === "e") classes += " errorSquare"; 
-
-        if(this.props.selectedr===r && this.props.selectedc===c){   // selected square
-            color = {r: 255, g: 255, b: 5, t: 0.5};
-        } else if(this.props.hintMode && this.isHintSquare(r,c)){      //hint square
-            color = {r: 180, g: 255, b: 110, t: 0.5};
-        } 
-        if(this.props.squares[r][c][1] === "f"){    // fixed square
-            if(color.r) color = {
-                r: (color.r+150)/2,
-                g: (color.g+155)/2,
-                b: (color.b+135)/2, 
-                t: 0.8
-            };
-            else color = {r: 150, g: 155, b: 135, t: 0.5};
-        } else if(!color.r) color = {r: 255, g: 255, b:255, t: 1};
-
-        if(r===2 || r===5) classes += " bottomBorder";
-        if(c===2 || c===5) classes += " rightBorder";
-
-        return (
-            <button 
-                key={r*9 + c} 
-                onClick={() => this.props.onClick(r, c)} 
-                className={classes}
-                style={{background: "rgb("+color.r+","+color.g+","+color.b+","+color.t+")"}}>
-                {this.props.squares[r][c][0]}
-            </button>
-        );
-    }
-  
-    render() {
-        var element = [];
-        for(var r=0; r<9; r++){
-            var row = [];
-            for(var c=0; c<9; c++){
-                if(this.props.squares[r][c][1] instanceof Array){
-                    row.push(this.renderSquare(r,c)); //change to renderPencilledSquare(r,c)
-                } else {
-                    row.push(this.renderSquare(r,c));
-                }
-            }
-            element.push(<div className="board-row" key={r}> {row} </div>);
-        }
-        return <div>{element}</div>;
-    }
-}
-
-// ========================================
-  
-class InputPad extends React.Component {
-    renderSquare(i) {
-        return (
-            <button key={i} onClick={()=>this.props.onClick(i)} className="smallButton">
-                {i}
-            </button>
-        );
-    }
-
-    render() {
-        var pad = [];
-        for (var i=1; i<=9; i++){
-            pad.push(this.renderSquare(i));
-        }
-        
-
-        return <div className="board-row game-board">{pad}</div>;
-    }
-}
   
 class Game extends React.Component {
     constructor(props) {
@@ -100,7 +15,7 @@ class Game extends React.Component {
         var difficulty = 35;
 
         this.state = {
-            squares: this.initBoard(difficulty), 
+            squares: initBoard(difficulty), 
             selectedr: null,
             selectedc: null,
             pencilMode: false,
@@ -204,54 +119,6 @@ class Game extends React.Component {
         this.setState({selectedc:null, selectedr:null});
     }
 
-    initBoard(level) {
-        var board = [];
-        for(var r=0; r<9; r++){
-            var row = [];
-            for(var c=0; c<9; c++) row.push([null, null]);
-            board.push(row);
-        }
-
-        //sample board
-        board[0][1]=[8,"f"];
-        board[0][7]=[1,"f"];
-        board[1][3]=[8,"f"];
-        board[1][4]=[9,"f"];
-        board[1][5]=[6,"f"];
-        board[2][0]=[6,"f"];
-        board[2][2]=[7,"f"];
-        board[2][3]=[5,"f"];
-        board[2][5]=[1,"f"];
-        board[2][6]=[3,"f"];
-        board[2][8]=[8,"f"];
-        board[3][0]=[1,"f"];
-        board[3][4]=[6,"f"];
-        board[3][8]=[2,"f"];
-        board[4][0]=[2,"f"];
-        board[4][1]=[9,"f"];
-        board[4][3]=[1,"f"];
-        board[4][4]=[5,"f"];
-        board[4][5]=[8,"f"];
-        board[4][7]=[3,"f"];
-        board[4][8]=[4,"f"];
-        board[5][0]=[7,"f"];
-        board[5][4]=[4,"f"];
-        board[5][8]=[9,"f"];
-        board[6][0]=[5,"f"];
-        board[6][2]=[1,"f"];
-        board[6][3]=[2,"f"];
-        board[6][5]=[4,"f"];
-        board[6][6]=[9,"f"];
-        board[6][8]=[7,"f"];
-        board[7][3]=[7,"f"];
-        board[7][4]=[1,"f"];
-        board[7][5]=[5,"f"];
-        board[8][1]=[7,"f"];
-        board[8][7]=[2,"f"];
-
-        return board;
-    }
-  
     render() {  
       return (
         <div className="game">
