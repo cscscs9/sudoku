@@ -12,7 +12,7 @@ import {initBoard, checkComplete, isValidMove} from './utils.js'
 class Game extends React.Component {
     constructor(props) {
         super(props);
-        var difficulty = 35;
+        var difficulty = 36;
 
         this.state = {
             squares: initBoard(difficulty), 

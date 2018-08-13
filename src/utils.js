@@ -35,21 +35,28 @@ export function isValidMove(num, board, selectedr, selectedc) {
 }
 
 export function initBoard(level) {
-    console.log("23423423");
     var board = [];
     for(let r=0; r<9; r++){
         let row = [];
         for(let c=0; c<9; c++) row.push([null, getNeighbors(r,c)]);
         board.push(row);
     }
-    console.log(board);
 
-    //if(!fillCells(board, {r: 0, c: 0})){
-      //  console.log("failed to fill board?");
+    if(!fillCells(board, {r: 0, c: 0})){
+        console.log("failed to fill board?");
         sampleBoard(board);
-    //} 
-
-    //remove randomly
+    } 
+    let count = 0;
+    for(let i=0; i<level; i++){
+        board[Math.floor(Math.random()*9)][Math.floor(Math.random()*9)][1] = "f";
+    }
+    for(let r=0; r<9; r++){
+        for(let c=0; c<9; c++){
+            if(board[r][c][1]!=="f") board[r][c] = [null, null];
+            else count++;
+        }
+    }
+    console.log(count);
     return board;
 }
 
@@ -76,25 +83,24 @@ function nextCell(coord){
 }
 
 function fillCells(board, coord){
-    if(coord.c >= 9) return true; //board filled
+    if(coord.c >= 9 || coord.r >= 9) return true; //board filled
 
     var options = new Set([1,2,3,4,5,6,7,8,9]);
     for(let neighbor of board[coord.r][coord.c][1]){
         if(board[neighbor[0]][neighbor[1]][0]!=null) options.delete(board[neighbor[0]][neighbor[1]][0]);
     }
-    console.log(coord, options);
 
     while(options.size > 0){
-        var value = Math.floor(Math.random()*options.size)
-        board[coord.r][coord.c][0] = [...options][value];
+        var value = [...options][Math.floor(Math.random()*options.size)];
+        board[coord.r][coord.c][0] = value;
+        options.delete(value);
 
         if(!fillCells(board, nextCell(coord))){ // remove option and try with another value
-            options.delete(value);
+            board[coord.r][coord.c][0] = null;
         } else return true;
     }
 
     return false; // no options, backtrack
-
 }
 
 function sampleBoard(board){
