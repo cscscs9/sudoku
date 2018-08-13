@@ -1,14 +1,103 @@
 
+export function checkComplete(board){
+    var complete = true;
+    for(let r=0; r<9; r++){
+        for(let c=0; c<9; c++){
+            if(board[r][c][1]==='e') {
+                board[r][c][1] = null;
+                complete = false;
+            } else if (board[r][c][0]===null) complete = false;
+        }
+    }
+    return complete;
+}
+
+export function isValidMove(num, board, selectedr, selectedc) {
+    if(num===null) return true;
+
+    for(let i=0; i<9; i++){
+        if(board[i][selectedc][0]===num && selectedr!==i){
+            return false;
+        } else if(board[selectedr][i][0]===num && selectedc!==i){
+            return false;
+        }
+    }
+    var r = Math.floor(selectedr/3)*3;
+    var c = Math.floor(selectedc/3)*3;
+    for(let ir=r; ir<r+3; ir++){
+        for(let ic=c; ic<c+3; ic++){
+            if(board[ir][ic][0]===num && selectedr!==ir && selectedc!==ic){
+                return false;
+            } 
+        }
+    }
+    return true;
+}
 
 export function initBoard(level) {
+    console.log("23423423");
     var board = [];
-    for(var r=0; r<9; r++){
-        var row = [];
-        for(var c=0; c<9; c++) row.push([null, null]);
+    for(let r=0; r<9; r++){
+        let row = [];
+        for(let c=0; c<9; c++) row.push([null, getNeighbors(r,c)]);
         board.push(row);
     }
+    console.log(board);
 
-    //sample board
+    //if(!fillCells(board, {r: 0, c: 0})){
+      //  console.log("failed to fill board?");
+        sampleBoard(board);
+    //} 
+
+    //remove randomly
+    return board;
+}
+
+function getNeighbors(r, c){
+    var neighbors = [];
+    for(let n=0; n<9; n++){
+        if(n!==c) neighbors.push([r,n]);
+        if(n!==r) neighbors.push([n,c]);
+    }
+
+    var rBorder = Math.floor(r/3)*3;
+    var cBorder = Math.floor(c/3)*3;
+    for(let ir=rBorder; ir<rBorder+3; ir++){
+        for(let ic=cBorder; ic<cBorder+3; ic++){
+            if(ir!==r && ic!==c) neighbors.push([ir,ic]);
+        }
+    }
+    return neighbors;
+}
+
+function nextCell(coord){
+    if(coord.r+1 >= 9) return {r:0, c:coord.c+1};
+    else return {r:coord.r+1, c:coord.c};
+}
+
+function fillCells(board, coord){
+    if(coord.c >= 9) return true; //board filled
+
+    var options = new Set([1,2,3,4,5,6,7,8,9]);
+    for(let neighbor of board[coord.r][coord.c][1]){
+        if(board[neighbor[0]][neighbor[1]][0]!=null) options.delete(board[neighbor[0]][neighbor[1]][0]);
+    }
+    console.log(coord, options);
+
+    while(options.size > 0){
+        var value = Math.floor(Math.random()*options.size)
+        board[coord.r][coord.c][0] = [...options][value];
+
+        if(!fillCells(board, nextCell(coord))){ // remove option and try with another value
+            options.delete(value);
+        } else return true;
+    }
+
+    return false; // no options, backtrack
+
+}
+
+function sampleBoard(board){
     board[0][1]=[8,"f"];
     board[0][7]=[1,"f"];
     board[1][3]=[8,"f"];
@@ -44,6 +133,4 @@ export function initBoard(level) {
     board[7][5]=[5,"f"];
     board[8][1]=[7,"f"];
     board[8][7]=[2,"f"];
-
-    return board;
 }

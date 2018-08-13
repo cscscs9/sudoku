@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import {Board} from './board'
 import {InputPad} from './input'
-import {initBoard} from './utils.js'
+import {initBoard, checkComplete, isValidMove} from './utils.js'
 
 //easy: 29-32
 //medium: 24-27
@@ -50,13 +50,13 @@ class Game extends React.Component {
         if(this.state.selectedr!==null && this.state.squares[this.state.selectedr][this.state.selectedc][1] !== "f"){
             this.state.squares[this.state.selectedr][this.state.selectedc][0] = num;
 
-            if(!this.isValidMove(num)){
+            if(!isValidMove(num,this.state.squares, this.state.selectedr, this.state.selectedc)){
                 this.state.errors++;
                 this.state.squares[this.state.selectedr][this.state.selectedc][1] = 'e';
                 this.forceUpdate(); 
             } else {
                 this.state.squares[this.state.selectedr][this.state.selectedc][1] = null;
-                if(this.checkComplete()){
+                if(checkComplete(this.state.squares)){
                     this.setState({
                         message: "Game Complete"
                     });
@@ -79,33 +79,6 @@ class Game extends React.Component {
         this.setState({
             pencilMode: !this.state.pencilMode
         })
-    }
-
-    isValidMove(num) {
-        if(num===null) return true;
-
-        for(var i=0; i<9; i++){
-            if(this.state.squares[i][this.state.selectedc][0]===num && this.state.selectedr!==i){
-                return false;
-            } else if(this.state.squares[this.state.selectedr][i][0]===num && this.state.selectedc!==i){
-                return false;
-            }
-        }
-        //check 3-square
-        return true;
-    }
-
-    checkComplete(){
-        var complete = true;
-        for(var r=0; r<9; r++){
-            for(var c=0; c<9; c++){
-                if(this.state.squares[r][c][1]==='e') {
-                    this.state.squares[r][c][1] = null;
-                    complete = false;
-                } else if (this.state.squares[r][c][0]===null) complete = false;
-            }
-        }
-        return complete;
     }
 
     clearBoard() {

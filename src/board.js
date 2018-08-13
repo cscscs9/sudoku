@@ -4,11 +4,13 @@ import './index.css';
 export class Board extends React.Component {
     isHintSquare(r, c) {
         var isHintSquare = this.props.selectedr===r || this.props.selectedc===c;
-
         if(this.props.selectedr!=null){
+            isHintSquare = isHintSquare || (Math.floor(r/3)===Math.floor(this.props.selectedr/3) && 
+                    Math.floor(this.props.selectedc/3)===Math.floor(c/3));
             if(this.props.squares[r][c][0]===null) return isHintSquare;
 
-            return isHintSquare || this.props.squares[r][c][0]===this.props.squares[this.props.selectedr][this.props.selectedc][0];
+            var curValue = this.props.squares[this.props.selectedr][this.props.selectedc][0];
+            return isHintSquare || this.props.squares[r][c][0]===curValue;
         }
         return isHintSquare;
     }
